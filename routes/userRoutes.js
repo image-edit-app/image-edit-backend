@@ -27,6 +27,10 @@ router.post('/login', async (req, res) => {
     const { contact_number, password, otp } = req.body;
     const user = await User.findOne({ contact_number });
     if (user) {
+      if (user.is_new_user) {
+        user["is_new_user"] = false;
+        await user.save()
+      }
       if (user.role === "ADMIN") {
         if (password === user.password) {
           res.json({ user });
@@ -41,9 +45,9 @@ router.post('/login', async (req, res) => {
         }
       }
     } else {
-      const new_user = new User({ contact_number, otp, role: "USER" });
+      const new_user = new User({ contact_number, otp, role: "USER", is_new_user: true });
       await new_user.save()
-      res.json({ user });
+      res.json({ new_user });
     }
 
   } catch (err) {
