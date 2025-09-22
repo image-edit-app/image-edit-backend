@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-// Get all users(CUSTOMER, SUPPLIER, ADMIN) with filters
-// GET /api/users?role=CUSTOMER
+// Get all users(USER, ADMIN) with filters
+// GET /api/users?role=USER
 router.get('/', async (req, res) => {
   try {
     const { role, plan_name } = req.query;

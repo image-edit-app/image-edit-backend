@@ -9,6 +9,7 @@ app.use(cors());
 
 // Import routes
 app.use('/api/users', require('./../routes/userRoutes'));
+app.use('/api/templates', require('./../routes/templateRoutes'));
 
 // Database connection helper for serverless environments
 let isConnected = false;
