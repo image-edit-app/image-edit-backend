@@ -51,27 +51,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-
-// POST /api/users
-router.post('/', async (req, res) => {
-  console.log(req.body);
-  try {
-    const { name, contact_number, contact_number2, role, state, address, gst_number, pan_number, firm_name } = req.body;
-    const existingUser = await User.findOne({ contact_number });
-    console.log(existingUser);
-    if (existingUser) {
-      return res.status(400).json({ error: 'User already exists' });
-    }
-    const user = new User({ name, contact_number, contact_number2, role, state, address, gst_number, pan_number, firm_name });
-    console.log(user);
-    await user.save();
-    console.log(user);
-    res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
 // GET /api/users/:id - get a single user
 router.get('/:id', async (req, res) => {
   try {
@@ -88,8 +67,8 @@ router.get('/:id', async (req, res) => {
 // PUT /api/users/:id - update a single user
 router.put('/:id', async (req, res) => {
   try {
-    const { name, contact_number, contact_number2, role, state, address, gst_number, pan_number, firm_name } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { name, contact_number, contact_number2, role, state, address, gst_number, pan_number, firm_name }, { new: true });
+    const { name, profile_pic, firm_name, address, language, gender, DOB } = req.body;
+    const user = await User.findByIdAndUpdate(req.params.id, { name, profile_pic, firm_name, address, language, gender, DOB }, { new: true });
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
