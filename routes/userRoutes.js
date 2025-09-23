@@ -33,13 +33,13 @@ router.post('/login', async (req, res) => {
       }
       if (user.role === "ADMIN") {
         if (password === user.password) {
-          res.json({ user });
+          res.json(user);
         } else {
           return res.status(400).json({ message: 'Invalid credentials' });
         }
       } else {
         if (otp === user.otp) {
-          res.json({ user });
+          res.json(user);
         } else {
           return res.status(400).json({ message: 'Invalid credentials' });
         }
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
     } else {
       const new_user = new User({ contact_number, otp, role: "USER", is_new_user: true });
       await new_user.save()
-      res.json({ new_user });
+      res.json(new_user);
     }
 
   } catch (err) {
