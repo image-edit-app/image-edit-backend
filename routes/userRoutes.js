@@ -77,6 +77,7 @@ router.put('/:id', async (req, res) => {
     'address',
     'language',
     'gender',
+    'designation',
     'DOB',
   ];
   const updates = req.body;
