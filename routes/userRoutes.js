@@ -45,7 +45,7 @@ router.post('/login', async (req, res) => {
         }
       }
     } else {
-      const new_user = new User({ contact_number, otp, role: "USER", is_new_user: true,userTemplateDetails });
+      const new_user = new User({ contact_number, otp, role: "USER", is_new_user: true });
       await new_user.save()
       res.json(new_user);
     }
