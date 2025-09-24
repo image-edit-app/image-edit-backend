@@ -70,15 +70,45 @@ router.get('/:id', async (req, res) => {
 
 // PUT /api/users/:id - update a single user
 router.put('/:id', async (req, res) => {
+  const ALLOWED_UPDATES = [
+    'name',
+    'profile_pic',
+    'firm_name',
+    'address',
+    'language',
+    'gender',
+    'DOB',
+  ];
+  const updates = req.body;
+  const id = req.params.id;
+
+  // Sanitize / filter only allowed fields
+  const updateData = {};
+  for (const key of ALLOWED_UPDATES) {
+    if (updates[key] !== undefined) {
+      updateData[key] = updates[key];
+    }
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    // Nothing to update
+    return res.status(400).json({ error: 'No valid fields provided for update' });
+  }
+
   try {
-    const { name, profile_pic, firm_name, address, language, gender, DOB } = req.body;
-    const user = await User.findByIdAndUpdate(req.params.id, { name, profile_pic, firm_name, address, language, gender, DOB }, { new: true });
+    const user = await User.findByIdAndUpdate(
+      id,
+      updateData
+    );
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user);
+
+    return res.json(user);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('Error updating user:', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 
