@@ -8,11 +8,14 @@ router.get('/', async (req, res) => {
   try {
     const { category, sub_category, paid } = req.query;
 
-    let filter = {};
+    const filter = {};
 
-    if (paid) filter.paid = paid;
-    if (category) filter.category = category;
-    if (sub_category) filter.sub_category = sub_category;
+    if (paid !== undefined) {
+      filter.paid = paid === 'true' || paid === true || paid === '1' || paid === 1;
+    }
+
+    if (category) filter.categories = category;           // matches arrays containing "category"
+    if (sub_category) filter.sub_categories = sub_category; // matches arrays containing "sub_category"
 
     const templates = await Template.find(filter);
     res.json(templates);
