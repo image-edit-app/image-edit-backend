@@ -28,7 +28,7 @@ router.post('/', async (req, res) => {
     const { url, categories, sub_categories, paid } = req.body;
 
     const templates = new Template({ url, categories, sub_categories, paid });
-    templates.save();
+    await templates.save();
     res.json(templates);
   } catch (err) {
     res.status(500).json({ error: err.message });
