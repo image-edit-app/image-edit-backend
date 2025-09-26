@@ -21,4 +21,19 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Add templates
+// POST /api/templates
+router.post('/', async (req, res) => {
+  try {
+    const { url, category, sub_category, paid } = req.body;
+
+    const templates  = new Template({ url, category, sub_category, paid });
+    templates.save();
+    res.json(templates);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+});
+
 module.exports = router;
