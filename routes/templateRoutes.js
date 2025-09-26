@@ -25,9 +25,9 @@ router.get('/', async (req, res) => {
 // POST /api/templates
 router.post('/', async (req, res) => {
   try {
-    const { url, category, sub_category, paid } = req.body;
+    const { url, categories, sub_categories, paid } = req.body;
 
-    const templates  = new Template({ url, category, sub_category, paid });
+    const templates = new Template({ url, categories, sub_categories, paid });
     templates.save();
     res.json(templates);
   } catch (err) {
