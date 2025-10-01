@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     start_date: { type: Number, default: moment.utc().valueOf() },
     end_date: { type: Number, default: moment.utc().valueOf() }
   }],
-  userTemplateDetails: {
+  user_template_details: {
     background_color: String,
     shape: String,
     date_position: String,

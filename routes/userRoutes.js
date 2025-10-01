@@ -79,6 +79,9 @@ router.put('/:id', async (req, res) => {
     'gender',
     'designation',
     'DOB',
+    'email_id',
+    'subscription_details',
+    'user_template_details'
   ];
   const updates = req.body;
   const id = req.params.id;
