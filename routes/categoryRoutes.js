@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../models/Categories');
+const Category = require('../models/Category');
 const moment = require('moment');
 
 // GET /api/categories?name="Samsung" - get all categories

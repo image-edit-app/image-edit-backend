@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../models/Categories');
-const SubCategory = require('../models/SubCategories');
+const Category = require('../models/Category');
+const SubCategory = require('../models/SubCategory');
 const moment = require('moment');
 
 // GET /subcategories?subCategoryName=Iphone&categoryName=Samsung - get all subcategories

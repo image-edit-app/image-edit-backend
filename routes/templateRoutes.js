@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Template = require('../models/Templates');
-const Category = require('../models/Categories');
-const SubCategory = require('../models/Subcategories');
+const Template = require('../models/Template');
+const Category = require('../models/Category');
+const SubCategory = require('../models/SubCategory');
 
 // Get all templates with filters
 // GET /api/templates?category=THOUGHTS
