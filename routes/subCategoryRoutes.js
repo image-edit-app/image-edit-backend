@@ -38,20 +38,20 @@ router.get('/', async (req, res) => {
 // POST /api/subcategories - create a new subCategory
 router.post('/', async (req, res) => {
   try {
-    const { name, category_name } = req.body;
+    const { name, category } = req.body;
 
-    if (!name || !category_name) {
-      return res.status(400).json({ error: 'name and category_name are required' });
+    if (!name || !Array.isArray(category) || category.length === 0) {
+      return res.status(400).json({ error: 'name and category are required' });
     }
 
     // Find category by name (case-insensitive)
-    const categoryDoc = await Category.findOne({ name: { $regex: category_name, $options: 'i' } });
-    if (!categoryDoc) {
+    const categoryDoc = await Category.find({ name: { $in: category } });
+    if (categoryDoc.length === 0) {
       return res.status(404).json({ error: 'Category not found' });
     }
-    const categoryId = categoryDoc._id;
+    const categoryIds = categoryDoc.map(category => category._id);
 
-    const subCategory = new SubCategory({ name, category: categoryId });
+    const subCategory = new SubCategory({ name, category: categoryIds });
     await subCategory.save();
 
     return res.status(201).json(subCategory);

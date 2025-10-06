@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
       filter.sub_categories = { $in: existing_sub_categories.map(sub_category => sub_category._id) };
     }
 
-    const templates = await Template.find(filter);
+    const templates = await Template.find(filter).populate('categories').populate('sub_categories').populate('plans');
     res.json(templates);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -63,21 +63,21 @@ router.put('/:id', async (req, res) => {
   try {
     const { url, categories, sub_categories, plans } = req.body;
     const existing_categories = await Category.find({ name: { $regex: categories, $options: 'i' } });
-    if(existing_categories.length === 0) {
+    if (existing_categories.length === 0) {
       return res.status(404).json({ error: 'Categories not found' });
     }
     const existing_sub_categories = await SubCategory.find({ name: { $regex: sub_categories, $options: 'i' } });
-    if(existing_sub_categories.length === 0) {
+    if (existing_sub_categories.length === 0) {
       return res.status(404).json({ error: 'Subcategories not found' });
     }
     const existing_plans = await SubscriptionPlan.find({ name: { $regex: plans, $options: 'i' } });
-    if(existing_plans.length === 0) {
+    if (existing_plans.length === 0) {
       return res.status(404).json({ error: 'Plans not found' });
     }
-    const template = await Template.findById(req.params.id); 
+    const template = await Template.findById(req.params.id);
     if (!template) {
       return res.status(404).json({ error: 'Template not found' });
-    } 
+    }
     template.url = url;
     template.categories = existing_categories.map(category => category._id);
     template.sub_categories = existing_sub_categories.map(sub_category => sub_category._id);
@@ -97,7 +97,7 @@ router.patch('/:id', async (req, res) => {
   try {
     const { status } = req.body;
     const template = await Template.findByIdAndUpdate(req.params.id, { status });
-    if (!template) {  
+    if (!template) {
       return res.status(404).json({ error: 'Template not found' });
     }
     res.json(template);
