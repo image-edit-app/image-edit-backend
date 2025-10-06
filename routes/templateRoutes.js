@@ -8,12 +8,13 @@ const SubCategory = require('../models/SubCategory');
 // GET /api/templates?category=THOUGHTS
 router.get('/', async (req, res) => {
   try {
-    const { category, sub_category, paid } = req.query;
+    const { category, sub_category, plans } = req.query;
 
     const filter = {};
 
-    if (paid !== undefined) {
-      filter.paid = paid === 'true' || paid === true || paid === '1' || paid === 1;
+    if (plans !== undefined) {
+      const existing_plans = await SubscriptionPlan.find({ name: { $regex: plans, $options: 'i' } });
+      filter.plans = { $in: existing_plans.map(plan => plan._id) };
     }
 
     if (category) {

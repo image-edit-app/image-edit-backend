@@ -6,9 +6,14 @@ const User = require('../models/User');
 // GET /api/users?role=USER
 router.get('/', async (req, res) => {
   try {
-    const { role, plan_name } = req.query;
+    const { role, plan } = req.query;
 
     let filter = {};
+
+    if (plan) {
+      const existing_plan = await SubscriptionPlan.find({ name: { $regex: plan, $options: 'i' } });
+      filter.plans = existing_plan._id;
+    }
 
     if (role) filter.role = role;
 

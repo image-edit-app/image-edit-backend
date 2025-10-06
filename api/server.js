@@ -13,6 +13,7 @@ app.use('/api/users', require('./../routes/userRoutes'));
 app.use('/api/templates', require('./../routes/templateRoutes'));
 app.use('/api/categories', require('./../routes/categoryRoutes'));
 app.use('/api/sub-categories', require('./../routes/subCategoryRoutes'));
+app.use('/api/subscription-plans', require('./../routes/subscriptionPlanRoutes'));
 
 // Database connection helper for serverless environments
 let isConnected = false;

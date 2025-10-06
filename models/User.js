@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   gender: String,
   DOB: { type: Number, default: moment.utc().valueOf() },
   subscription_details: [{
-    plan_name: String,
+    plan_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SubscriptionPlan' },
     used_templates: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Template' }],
     start_date: { type: Number, default: moment.utc().valueOf() },
     end_date: { type: Number, default: moment.utc().valueOf() }
