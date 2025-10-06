@@ -56,4 +56,19 @@ router.post('/', async (req, res) => {
 
 });
 
+//Update status of template 
+// PATCH /api/templates/:id
+router.patch('/:id', async (req, res) => {
+  try {
+    const { status } = req.body;
+    const template = await Template.findByIdAndUpdate(req.params.id, { status });
+    if (!template) {  
+      return res.status(404).json({ error: 'Template not found' });
+    }
+    res.json(template);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
