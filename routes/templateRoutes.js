@@ -38,7 +38,7 @@ router.get('/', async (req, res) => {
 // POST /api/templates
 router.post('/', async (req, res) => {
   try {
-    const { url, categories, sub_categories, paid } = req.body;
+    const { url, categories, sub_categories, plans, font_family, font_size, font_color, font_style, font_weight } = req.body;
 
     const existing_categories = await Category.find({ name: { $regex: categories, $options: 'i' } });
     const existing_sub_categories = await SubCategory.find({ name: { $regex: sub_categories, $options: 'i' } });
@@ -47,7 +47,12 @@ router.post('/', async (req, res) => {
       url,
       categories: existing_categories.map(category => category._id),
       sub_categories: existing_sub_categories.map(sub_category => sub_category._id),
-      paid
+      plans,
+      font_family,
+      font_size,
+      font_color,
+      font_style,
+      font_weight
     });
     await templates.save();
     res.json(templates);
@@ -61,7 +66,7 @@ router.post('/', async (req, res) => {
 // PUT /api/templates/:id
 router.put('/:id', async (req, res) => {
   try {
-    const { url, categories, sub_categories, plans } = req.body;
+    const { url, categories, sub_categories, plans, font_family, font_size, font_color, font_style, font_weight } = req.body;
     const existing_categories = await Category.find({ name: { $regex: categories, $options: 'i' } });
     if (existing_categories.length === 0) {
       return res.status(404).json({ error: 'Categories not found' });
@@ -82,6 +87,11 @@ router.put('/:id', async (req, res) => {
     template.categories = existing_categories.map(category => category._id);
     template.sub_categories = existing_sub_categories.map(sub_category => sub_category._id);
     template.plans = existing_plans.map(plan => plan._id);
+    template.font_family = font_family;
+    template.font_size = font_size;
+    template.font_color = font_color;
+    template.font_style = font_style;
+    template.font_weight = font_weight;
     await template.save();
     res.json(template);
   } catch (err) {

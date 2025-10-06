@@ -7,6 +7,11 @@ const templateSchema = new mongoose.Schema({
   categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
   sub_categories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'SubCategory' }],
   status: String,
+  font_family: String,
+  font_size: String,
+  font_color: String,
+  font_style: String,
+  font_weight: String,
   created_at: { type: Number, default: moment.utc().valueOf() },
   updated_at: { type: Number, default: moment.utc().valueOf() }
 });
