@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
     const { name, price, duration, description, status } = req.body;
 
     if (!name || !price || !duration || !description || !status) {
-      return res.status(400).json({ error: 'name and category_name are required' });
+      return res.status(400).json({ error: 'name, price, duration, description and status are required' });
     }
 
     const subscriptionPlan = new SubscriptionPlan({ name, price, duration, description, status });
