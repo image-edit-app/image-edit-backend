@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   is_new_user: Boolean,
   profile_pic: String,
+  background_removed_pic: String,
   firm_name: String,
   designation: String,
   address: String,
@@ -17,7 +18,7 @@ const userSchema = new mongoose.Schema({
   gender: String,
   DOB: { type: Number, default: moment.utc().valueOf() },
   subscription_details: [{
-    plan_id: { type: mongoose.Schema.Types.ObjectId, ref: 'SubscriptionPlan' },
+    plan: { type: mongoose.Schema.Types.ObjectId, ref: 'SubscriptionPlan' },
     used_templates: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Template' }],
     start_date: { type: Number, default: moment.utc().valueOf() },
     end_date: { type: Number, default: moment.utc().valueOf() }

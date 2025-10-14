@@ -77,14 +77,15 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   const ALLOWED_UPDATES = [
     'name',
+    'email_id',
     'profile_pic',
+    'background_removed_pic',
     'firm_name',
+    'desi,gnation',
     'address',
     'language',
     'gender',
-    'designation',
     'DOB',
-    'email_id',
     'subscription_details',
     'user_template_details'
   ];
