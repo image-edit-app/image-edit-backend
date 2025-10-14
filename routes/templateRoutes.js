@@ -37,23 +37,34 @@ router.get('/', async (req, res) => {
 // Add templates
 // POST /api/templates
 router.post('/', async (req, res) => {
+  console.log("req.body", req.body)
   try {
-    const { url, categories, sub_categories, plans, font_family, font_size, font_color, font_style, font_weight } = req.body;
+    const { url, categories, sub_categories, plans, font_family, font_size, font_color } = req.body;
 
-    const existing_categories = await Category.find({ name: { $regex: categories, $options: 'i' } });
-    const existing_sub_categories = await SubCategory.find({ name: { $regex: sub_categories, $options: 'i' } });
+    const existing_categories = await Category.find({ name: { $in: categories } });
+    if (existing_categories.length === 0) {
+      return res.status(404).json({ error: 'Categories not found' });
+    }
+    const existing_sub_categories = await SubCategory.find({ name: { $in: sub_categories } });
+    if (existing_sub_categories.length === 0) {
+      return res.status(404).json({ error: 'Subcategories not found' });
+    }
+    const existing_plans = await SubscriptionPlan.find({ name: { $in: plans } });
+    if (existing_plans.length === 0) {
+      return res.status(404).json({ error: 'Plans not found' });
+    }
 
     const templates = new Template({
       url,
       categories: existing_categories.map(category => category._id),
       sub_categories: existing_sub_categories.map(sub_category => sub_category._id),
-      plans,
+      plans: existing_plans.map(plan => plan._id),
       font_family,
       font_size,
-      font_color,
-      font_style,
-      font_weight
+      font_color
     });
+    console.log('templates: ', templates);
+
     await templates.save();
     res.json(templates);
   } catch (err) {
@@ -67,22 +78,25 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { url, categories, sub_categories, plans, font_family, font_size, font_color, font_style, font_weight } = req.body;
-    const existing_categories = await Category.find({ name: { $regex: categories, $options: 'i' } });
-    if (existing_categories.length === 0) {
-      return res.status(404).json({ error: 'Categories not found' });
-    }
-    const existing_sub_categories = await SubCategory.find({ name: { $regex: sub_categories, $options: 'i' } });
-    if (existing_sub_categories.length === 0) {
-      return res.status(404).json({ error: 'Subcategories not found' });
-    }
-    const existing_plans = await SubscriptionPlan.find({ name: { $regex: plans, $options: 'i' } });
-    if (existing_plans.length === 0) {
-      return res.status(404).json({ error: 'Plans not found' });
-    }
+
     const template = await Template.findById(req.params.id);
     if (!template) {
       return res.status(404).json({ error: 'Template not found' });
     }
+
+    const existing_categories = await Category.find({ name: { $in: categories } });
+    if (existing_categories.length === 0) {
+      return res.status(404).json({ error: 'Categories not found' });
+    }
+    const existing_sub_categories = await SubCategory.find({ name: { $in: sub_categories } });
+    if (existing_sub_categories.length === 0) {
+      return res.status(404).json({ error: 'Subcategories not found' });
+    }
+    const existing_plans = await SubscriptionPlan.find({ name: { $in: plans } });
+    if (existing_plans.length === 0) {
+      return res.status(404).json({ error: 'Plans not found' });
+    }
+
     template.url = url;
     template.categories = existing_categories.map(category => category._id);
     template.sub_categories = existing_sub_categories.map(sub_category => sub_category._id);

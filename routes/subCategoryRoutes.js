@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/subcategories/:id - get a single subCategory
+// GET /api/sub-categories/:id - get a single subCategory
 router.get('/:id', async (req, res) => {
   try {
     const subCategory = await SubCategory.findById(req.params.id).populate('category');
@@ -72,6 +72,36 @@ router.get('/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+
+// PUT /api/sub-categories/:id - update a single subcategory
+router.put('/:id', async (req, res) => {
+  const { name, category_name } = req.body;
+
+  const categoryDoc = await Category.findOne({ name: { $regex: category_name, $options: 'i' } });
+  if (!categoryDoc) {
+    return res.status(404).json({ error: 'Category not found' });
+  }
+
+  const categoryId = categoryDoc._id;
+
+  try {
+    const subCategory = await SubCategory.findByIdAndUpdate(
+      id,
+      { name, categoryId }
+    );
+
+    if (!subCategory) {
+      return res.status(404).json({ error: 'SubCategory not found' });
+    }
+
+    return res.json(subCategory);
+  } catch (err) {
+    console.error('Error updating user:', err);
+    return res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 module.exports = router;
