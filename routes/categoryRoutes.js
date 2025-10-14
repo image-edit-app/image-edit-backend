@@ -62,7 +62,7 @@ router.put('/:id', async (req, res) => {
 
   try {
     const category = await Category.findByIdAndUpdate(
-      id,
+      req.params.id,
       name
     );
 
