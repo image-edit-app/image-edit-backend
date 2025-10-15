@@ -9,7 +9,17 @@ const SubscriptionPlan = require('../models/SubscriptionPlan');
 // GET /api/templates?category=THOUGHTS
 router.get('/', async (req, res) => {
   try {
-    const { category, sub_category, plans } = req.query;
+    const { category, sub_category, plans, limit: limitStr, offset: offsetStr } = req.query;
+
+    // parse limit and offset, and default values
+    const defaultLimit = 10;
+    const maxLimit = 10;
+    let limit = parseInt(limitStr);
+    if (isNaN(limit) || limit < 1) limit = defaultLimit;
+    if (limit > maxLimit) limit = maxLimit;
+
+    let offset = parseInt(offsetStr);
+    if (isNaN(offset) || offset < 0) offset = 0;
 
     const filter = {};
 
@@ -27,7 +37,12 @@ router.get('/', async (req, res) => {
       filter.sub_categories = { $in: existing_sub_categories.map(sub_category => sub_category._id) };
     }
 
-    const templates = await Template.find(filter).populate('categories').populate('sub_categories').populate('plans');
+    const templates = await Template.find(filter)
+      .populate('categories')
+      .populate('sub_categories')
+      .populate('plans')
+      .skip(offset)
+      .limit(limit);
     res.json(templates);
   } catch (err) {
     res.status(500).json({ error: err.message });
