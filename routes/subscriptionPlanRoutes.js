@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { name, price, duration, description, status } = req.body;
-    const subscriptionPlan = await SubscriptionPlan.findByIdAndUpdate(req.params.id, { name, price, duration, description, status });
+    const subscriptionPlan = await SubscriptionPlan.findByIdAndUpdate(req.params.id, { name, price, duration, description, status }, { new: true });
     if (!subscriptionPlan) {
       return res.status(404).json({ error: 'SubscriptionPlan not found' });
     }

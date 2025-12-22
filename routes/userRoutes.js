@@ -108,7 +108,8 @@ router.put('/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       id,
-      updateData
+      updateData,
+      { new: true }
     );
 
     if (!user) {
