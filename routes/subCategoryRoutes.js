@@ -77,6 +77,9 @@ router.get('/:id', async (req, res) => {
 // PUT /api/sub-categories/:id - update a single subcategory
 router.put('/:id', async (req, res) => {
   const { name, category_name } = req.body;
+  console.log("name", name);
+  console.log("category_name", category_name);
+
 
   const categoryDoc = await Category.findOne({ name: { $regex: category_name, $options: 'i' } });
   if (!categoryDoc) {
@@ -88,7 +91,8 @@ router.put('/:id', async (req, res) => {
   try {
     const subCategory = await SubCategory.findByIdAndUpdate(
       req.params.id,
-      { name, category: categoryId }
+      { name, category: categoryId },
+      { new: true }
     );
 
     if (!subCategory) {
