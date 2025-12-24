@@ -12,6 +12,7 @@ const templateSchema = new mongoose.Schema({
   font_color: String,
   font_style: String,
   font_weight: String,
+  has_multiple_images: Boolean,
   created_at: { type: Number, default: moment.utc().valueOf() },
   updated_at: { type: Number, default: moment.utc().valueOf() }
 });

@@ -54,7 +54,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   console.log("req.body", req.body)
   try {
-    const { url, categories, sub_categories, plans, font_family, font_size, font_color } = req.body;
+    const { url, categories, sub_categories, plans, font_family, font_size, font_color, has_multiple_images } = req.body;
 
     const existing_categories = await Category.find({ name: { $in: categories } });
     if (existing_categories.length === 0) {
@@ -76,7 +76,8 @@ router.post('/', async (req, res) => {
       plans: existing_plans.map(plan => plan._id),
       font_family,
       font_size,
-      font_color
+      font_color,
+      has_multiple_images
     });
     console.log('templates: ', templates);
 
